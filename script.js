@@ -48,5 +48,5 @@ setInterval(() => {
   game.ghost.move(game.ghost.x, game.ghost.y, game.pacman.x, game.pacman.y);
   render.renderLevel(game.LEVEL, pacmanRotation);
 }
-, 500);
+, 400);
 

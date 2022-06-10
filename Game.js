@@ -43,7 +43,6 @@ class Game {
       num: 0,
       pastPosition: [],
       move(x, y, pacmanX, pacmanY) {
-        console.log(this.pastPosition);
         let min = 500;
         let way = [];
         for (let i = y - 1; i <= y + 1; i++) {
@@ -51,7 +50,7 @@ class Game {
           for (let j = startX; j <= x + 1; j += 2) {
             if (this.temp.LEVEL[i][j] !== 1) {
               const thisWayLenght = ((j - pacmanX) * (j - pacmanX)) + ((i - pacmanY) * (i - pacmanY));
-              const noBack = !((j === this.pastPosition[0]) && (i === this.pastPosition[1]))
+              const noBack = !((j === this.pastPosition[0]) && (i === this.pastPosition[1]));
               if ((thisWayLenght < min) && noBack) {
                 min = thisWayLenght;
                 way = [j, i];
@@ -61,6 +60,11 @@ class Game {
         }
         this.temp.LEVEL[this.y][this.x] = this.on;
         this.pastPosition = [this.x, this.y];
+        console.log(this.pastPosition);
+        if (this.pastPosition[0] === 9 && this.pastPosition[1] === 8) {
+          this.temp.LEVEL[8][9] = 1;
+          this.temp.LEVEL[8][10] = 1;
+        }
         if (way.length === 0) way = this.pastPosition;
         this.x = way[0];
         this.y = way[1];
