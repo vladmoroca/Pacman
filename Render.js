@@ -88,6 +88,46 @@ class Render {
           this.canvas.context.arc(headRadius / 4 + retreatX,
             -headRadius / 2.2 + retreatY, headRadius / 8, 0, 2 * Math.PI);
           this.canvas.context.fill();
+          break
+        case 5:
+          this.canvas.context.strokeStyle =  'black';
+          this.canvas.context.fillStyle =  'green';
+          this.canvas.context.lineWidth = radius * 0.05;
+          this.canvas.context.beginPath();
+          for (let foot = 0; foot < feet; foot++) {
+            this.canvas.context.arc(
+              (2 * footRadius * (feet - foot)) - headRadius - footRadius + retreatX,
+              radius - footRadius + retreatY,
+              footRadius, 0, Math.PI
+            );
+          }
+          this.canvas.context.lineTo(-headRadius + retreatX,
+            radius - footRadius + retreatY);
+          this.canvas.context.arc(retreatX,
+            headRadius - radius + retreatY, headRadius, Math.PI, 2 * Math.PI);
+          this.canvas.context.closePath();
+          this.canvas.context.fill();
+          this.canvas.context.stroke();
+
+          this.canvas.context.fillStyle = 'white';
+          this.canvas.context.beginPath();
+          this.canvas.context.arc(-headRadius / 2.5 + retreatX,
+            -headRadius / 2 + retreatY, headRadius / 3, 0, 2 * Math.PI);
+          this.canvas.context.fill();
+          this.canvas.context.beginPath();
+          this.canvas.context.arc(headRadius / 3.5 + retreatX,
+            -headRadius / 2 + retreatY, headRadius / 3, 0, 2 * Math.PI);
+          this.canvas.context.fill();
+
+          this.canvas.context.fillStyle = 'black';
+          this.canvas.context.beginPath();
+          this.canvas.context.arc(-headRadius / 2 + retreatX,
+            -headRadius / 2.2 + retreatY, headRadius / 8, 0, 2 * Math.PI);
+          this.canvas.context.fill();
+          this.canvas.context.beginPath();
+          this.canvas.context.arc(headRadius / 4 + retreatX,
+            -headRadius / 2.2 + retreatY, headRadius / 8, 0, 2 * Math.PI);
+          this.canvas.context.fill();
         }
       }
     }

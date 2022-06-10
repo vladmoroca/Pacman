@@ -41,11 +41,12 @@ document.addEventListener('keydown', event => {
 
 render.renderLevel(game.LEVEL, pacmanRight);
 setInterval(() => {
-  if (game.ghost.gameOver) {
+  if (game.gameOver) {
     alert('GAME OVER');
     game = new Game();
   }
   game.ghost.move(game.ghost.x, game.ghost.y, game.pacman.x, game.pacman.y);
+  game.ghost2.move(game.ghost2.x, game.ghost2.y, game.pacman.x, game.pacman.y);
   render.renderLevel(game.LEVEL, pacmanRotation);
 }
 , 400);
