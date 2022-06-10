@@ -61,6 +61,7 @@ class Game {
         }
         this.temp.LEVEL[this.y][this.x] = this.on;
         this.pastPosition = [this.x, this.y];
+        if (way.length === 0) way = this.pastPosition;
         this.x = way[0];
         this.y = way[1];
         this.on = this.temp.LEVEL[this.y][this.x];
