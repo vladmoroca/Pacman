@@ -42,7 +42,7 @@ document.addEventListener('keydown', event => {
 render.renderLevel(game.LEVEL, pacmanRight);
 setInterval(() => {
   if (game.ghost.gameOver) {
-    alert('game Over');
+    alert('GAME OVER');
     game = new Game();
   }
   game.ghost.move(game.ghost.x, game.ghost.y, game.pacman.x, game.pacman.y);

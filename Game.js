@@ -48,19 +48,20 @@ class Game {
         for (let i = y - 1; i <= y + 1; i++) {
           const startX = x - 1 + ((y + i) % 2);
           for (let j = startX; j <= x + 1; j += 2) {
-            if (this.temp.LEVEL[i][j] !== 1) {
-              const thisWayLenght = ((j - pacmanX) * (j - pacmanX)) + ((i - pacmanY) * (i - pacmanY));
-              const noBack = !((j === this.pastPosition[0]) && (i === this.pastPosition[1]));
-              if ((thisWayLenght < min) && noBack) {
-                min = thisWayLenght;
-                way = [j, i];
+            if (this.temp.LEVEL[i]) {
+              if (this.temp.LEVEL[i][j] !== 1) {
+                const thisWayLenght = ((j - pacmanX) * (j - pacmanX)) + ((i - pacmanY) * (i - pacmanY));
+                const noBack = !((j === this.pastPosition[0]) && (i === this.pastPosition[1]));
+                if ((thisWayLenght < min) && noBack) {
+                  min = thisWayLenght;
+                  way = [j, i];
+                }
               }
             }
           }
         }
         this.temp.LEVEL[this.y][this.x] = this.on;
         this.pastPosition = [this.x, this.y];
-        console.log(this.pastPosition);
         if (this.pastPosition[0] === 9 && this.pastPosition[1] === 8) {
           this.temp.LEVEL[8][9] = 1;
           this.temp.LEVEL[8][10] = 1;
