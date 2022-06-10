@@ -10,31 +10,53 @@ let game = new Game();
 window.render  = render;
 window.game = game;
 let pacmanRotation = pacmanRight;
+const move = (direction, pacmanDirection) => {
+  game[direction]('pacman');
+  render.renderLevel(game.LEVEL, pacmanDirection);
+  pacmanRotation = pacmanDirection;
+};
+const moveDown = () => {
+  move('moveDown', pacmanDown);
+};
+const moveUp = () => {
+  move('moveUp', pacmanUp);
+};
+const moveRight = () => {
+  move('moveRight', pacmanRight);
+};
+const moveLeft = () => {
+  move('moveLeft', pacmanLeft);
+};
+let interval;
 document.addEventListener('keydown', event => {
   switch (event.key) {
   case 's':
   case 'ArrowDown':
-    game.moveDown('pacman');
-    render.renderLevel(game.LEVEL, pacmanDown);
-    pacmanRotation = pacmanDown;
+    clearInterval(interval)
+    {
+      interval = setInterval(moveDown, 300);
+    }
     break;
   case 'w':
   case 'ArrowUp':
-    game.moveUp('pacman');
-    render.renderLevel(game.LEVEL, pacmanUp);
-    pacmanRotation = pacmanUp;
+    clearInterval(interval)
+    {
+      interval = setInterval(moveUp, 300);
+    }
     break;
   case 'a':
   case 'ArrowLeft':
-    game.moveLeft('pacman');
-    render.renderLevel(game.LEVEL, pacmanLeft);
-    pacmanRotation = pacmanLeft;
+    clearInterval(interval)
+    {
+      interval = setInterval(moveLeft, 300);
+    }
     break;
   case 'd':
   case 'ArrowRight':
-    game.moveRight('pacman');
-    render.renderLevel(game.LEVEL, pacmanRight);
-    pacmanRotation = pacmanRight;
+    clearInterval(interval)
+    {
+      interval = setInterval(moveRight, 300);
+    }
     break;
   }
 });

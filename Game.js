@@ -84,7 +84,6 @@ class Game {
       num: 0,
       pastPosition: [],
       move(x, y, pacmanX, pacmanY) {
-        console.log(this.on)
         let min = 500;
         let way = [];
         for (let i = y - 1; i <= y + 1; i++) {
