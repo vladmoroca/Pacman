@@ -31,7 +31,7 @@ setInterval(() => {
     mouth = false;
     anim -= 0.02;
   } else mouth = true;
-  if (rememberWay[0] + 1) {
+  if (rememberWay[0] + 2) {
     if (game.LEVEL[game.pacman.y + rememberWay[0]][game.pacman.x + rememberWay[1]] !== 1) {
       rememberMove();
     }
