@@ -11,6 +11,7 @@ let game = new Game();
 window.render  = render;
 window.game = game;
 let anim = 0;
+let smooth = [0, 0];
 let pacmanRotation = pacmanRight;
 let rememberWay = [];
 let interval;
@@ -25,40 +26,76 @@ const rememberMove = () => {
   rememberWay = [];
 };
 setInterval(() => {
-  render.renderLevel(game.LEVEL, pacmanRotation, anim);
+  render.renderLevel(game.LEVEL, pacmanRotation, anim, smooth);
   if (anim < 0.19 && mouth) {
-    anim += 0.02;
-  } else if (anim > 0) {
+    anim += 0.015;
+    anim = +anim.toFixed(3);
+  } else if (anim >= 0) {
     mouth = false;
-    anim -= 0.02;
+    anim -= 0.015;
+    anim = +anim.toFixed(3);
   } else mouth = true;
   if (rememberWay[0] + 2) {
     if (game.LEVEL[game.pacman.y + rememberWay[0]][game.pacman.x + rememberWay[1]] !== 1) {
       rememberMove();
     }
   }
+  if (smooth[0] > 0) {
+    smooth[0] -= 3;
+  }
+  if (smooth[0] < 0) {
+    smooth[0] += 3;
+  }
+  if (smooth[1] > 0) {
+    smooth[1] -= 3;
+  }
+  if (smooth[1] < 0) {
+    smooth[1] += 3;
+  }
   if (game.gameOver) {
     alert('GAME OVER');
     game = new Game();
+    smooth = [0, 0];
     clearInterval(interval);
   }
   score.textContent = `Score:${game.score}`;
   if (game.score >= 18900) {
     alert('Congratulation!');
     game = new Game();
+    smooth = [0, 0];
   }
 }, 20);
 const moveDown = () => {
-  move('moveDown', pacmanDown);
+  if (game.LEVEL[game.pacman.y + 1]) {
+    if (game.LEVEL[game.pacman.y + 1][game.pacman.x] !== 1) {
+      move('moveDown', pacmanDown);
+      smooth = [0, 40];
+    }
+  } else move('moveDown', pacmanDown);
 };
 const moveUp = () => {
-  move('moveUp', pacmanUp);
+  if (game.LEVEL[game.pacman.y - 1]) {
+    if (game.LEVEL[game.pacman.y - 1][game.pacman.x] !== 1) {
+      move('moveUp', pacmanUp);
+      smooth = [0, -40];
+    }
+  } else move('moveUp', pacmanUp);
 };
 const moveRight = () => {
-  move('moveRight', pacmanRight);
+  if (game.LEVEL[game.pacman.y][game.pacman.x + 1] + 1) {
+    if (game.LEVEL[game.pacman.y][game.pacman.x + 1] !== 1) {
+      move('moveRight', pacmanRight);
+      smooth = [40, 0];
+    }
+  } else move('moveRight', pacmanRight);
 };
 const moveLeft = () => {
-  move('moveLeft', pacmanLeft);
+  if (game.LEVEL[game.pacman.y][game.pacman.x - 1] + 1) {
+    if (game.LEVEL[game.pacman.y][game.pacman.x - 1] !== 1) {
+      move('moveLeft', pacmanLeft);
+      smooth = [-40, 0];
+    }
+  } else move('moveLeft', pacmanLeft);
 };
 document.addEventListener('keydown', event => {
   switch (event.key) {
@@ -100,8 +137,6 @@ document.addEventListener('keydown', event => {
     break;
   }
 });
-
-render.renderLevel(game.LEVEL, pacmanRight);
 setInterval(() => {
   game.ghost.move(game.ghost.x, game.ghost.y, game.pacman.x, game.pacman.y);
   game.ghost2.move(game.ghost2.x, game.ghost2.y, game.pacman.x, game.pacman.y);

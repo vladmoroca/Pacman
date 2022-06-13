@@ -14,7 +14,7 @@ class Render {
     this.canvas.context = this.canvas.getContext('2d');
 
   }
-  renderLevel(Level, pos, anim) {
+  renderLevel(Level, pos, anim, smooth) {
     this.canvas.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     for (let y = 0; y < Level.length; y++) {
       const row = Level[y];
@@ -36,9 +36,10 @@ class Render {
           break;
         case 2:
           this.canvas.context.beginPath();
-          this.canvas.context.arc(centrX,
-            centrY, 18, (pos - anim) * Math.PI, (pos - 0.4 + anim) * Math.PI);
-          this.canvas.context.lineTo(centrX, centrY);
+          this.canvas.context.arc(centrX - smooth[0],
+            centrY - smooth[1],
+            18, (pos - anim) * Math.PI, (pos - 0.4 + anim) * Math.PI);
+          this.canvas.context.lineTo(centrX - smooth[0], centrY - smooth[1]);
           this.canvas.context.fillStyle = 'yellow';
           this.canvas.context.fill();
           break;
