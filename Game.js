@@ -31,6 +31,7 @@ class Game {
       // 5 - ghost2
       // 0 - void
     ];
+    this.score = 0;
     this.gameOver = false;
     this.pacman = {
       x: 1,
@@ -71,7 +72,7 @@ class Game {
         this.x = way[0];
         this.y = way[1];
         this.on = this.temp.LEVEL[this.y][this.x];
-        if (this.on === 2) this.temp.gameOver = true
+        if (this.on === 2) this.temp.gameOver = true;
         this.temp.LEVEL[this.y][this.x] = 4;
       }
     };
@@ -107,7 +108,7 @@ class Game {
         this.x = way[0];
         this.y = way[1];
         this.on = this.temp.LEVEL[this.y][this.x];
-        if (this.on === 2)  this.temp.gameOver = true
+        if (this.on === 2)  this.temp.gameOver = true;
         this.temp.LEVEL[this.y][this.x] = 5;
       }
     };
@@ -123,6 +124,9 @@ class Game {
     if (this.LEVEL[this[obj].y][this[obj].x + 1] !== 1) {
       if (this.LEVEL[this[obj].y][this[obj].x + 1] === 4 || this.LEVEL[this[obj].y][this[obj].x + 1] === 5) {
         this.gameOver = true;
+      }
+      if (this.LEVEL[this[obj].y][this[obj].x + 1] === 3) {
+        this.score += 100;
       }
       this.LEVEL[this[obj].y][this[obj].x] = 0;
       this[obj].x++;
@@ -140,6 +144,9 @@ class Game {
       if (this.LEVEL[this[obj].y][this[obj].x - 1] === 4 || this.LEVEL[this[obj].y][this[obj].x - 1] === 5) {
         this.gameOver = true;
       }
+      if (this.LEVEL[this[obj].y][this[obj].x - 1] === 3) {
+        this.score += 100;
+      }
       this.LEVEL[this[obj].y][this[obj].x] = 0;
       this[obj].x--;
       this.LEVEL[this[obj].y][this[obj].x] = 2;
@@ -156,6 +163,9 @@ class Game {
       if (this.LEVEL[this[obj].y - 1][this[obj].x ] === 4 || this.LEVEL[this[obj].y - 1][this[obj].x ] === 5) {
         this.gameOver = true;
       }
+      if (this.LEVEL[this[obj].y - 1][this[obj].x ] === 3) {
+        this.score += 100;
+      }
       this.LEVEL[this[obj].y][this[obj].x] = 0;
       this[obj].y--;
       this.LEVEL[this[obj].y][this[obj].x] = 2;
@@ -171,6 +181,9 @@ class Game {
     if (this.LEVEL[this[obj].y + 1][this[obj].x] !== 1) {
       if (this.LEVEL[this[obj].y + 1][this[obj].x] === 4 || this.LEVEL[this[obj].y + 1][this[obj].x] === 5) {
         this.gameOver = true;
+      }
+      if (this.LEVEL[this[obj].y + 1][this[obj].x ] === 3) {
+        this.score += 100;
       }
       this.LEVEL[this[obj].y][this[obj].x] = 0;
       this[obj].y++;

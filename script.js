@@ -4,7 +4,8 @@ const pacmanLeft = 1.2;
 const pacmanRight = 0.2;
 const pacmanUp = 1.7;
 const pacmanDown = 0.7;
-const root = document.querySelector('#root');
+const root = document.getElementById('root');
+const score = document.getElementById('score');
 const render = new Render(root, 800, 840, 21, 20);
 let game = new Game();
 window.render  = render;
@@ -21,10 +22,10 @@ const move = (direction, pacmanDirection) => {
 const rememberMove = () => {
   clearInterval(interval);
   interval = setInterval(rememberWay[2], 300);
-  rememberWay = []
+  rememberWay = [];
 };
 setInterval(() => {
-  render.renderLevel(game.LEVEL, pacmanRotation, anim); 
+  render.renderLevel(game.LEVEL, pacmanRotation, anim);
   if (anim < 0.19 && mouth) {
     anim += 0.02;
   } else if (anim > 0) {
@@ -36,7 +37,16 @@ setInterval(() => {
       rememberMove();
     }
   }
-
+  if (game.gameOver) {
+    alert('GAME OVER');
+    game = new Game();
+    clearInterval(interval);
+  }
+  score.textContent = `Score:${game.score}`;
+  if (game.score >= 18900) {
+    alert('Congratulation!');
+    game = new Game();
+  }
 }, 20);
 const moveDown = () => {
   move('moveDown', pacmanDown);
@@ -93,11 +103,6 @@ document.addEventListener('keydown', event => {
 
 render.renderLevel(game.LEVEL, pacmanRight);
 setInterval(() => {
-  if (game.gameOver) {
-    alert('GAME OVER');
-    game = new Game();
-    clearInterval(interval);
-  }
   game.ghost.move(game.ghost.x, game.ghost.y, game.pacman.x, game.pacman.y);
   game.ghost2.move(game.ghost2.x, game.ghost2.y, game.pacman.x, game.pacman.y);
 }
