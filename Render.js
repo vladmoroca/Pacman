@@ -14,7 +14,7 @@ class Render {
     this.canvas.context = this.canvas.getContext('2d');
 
   }
-  renderLevel(Level, pos, anim, smooth) {
+  renderLevel(Level, pos, anim, smooth, pacmanColor = 'yellow') {
     this.canvas.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     for (let y = 0; y < Level.length; y++) {
       const row = Level[y];
@@ -40,7 +40,7 @@ class Render {
             centrY - smooth[1],
             18, (pos - anim) * Math.PI, (pos - 0.4 + anim) * Math.PI);
           this.canvas.context.lineTo(centrX - smooth[0], centrY - smooth[1]);
-          this.canvas.context.fillStyle = 'yellow';
+          this.canvas.context.fillStyle = pacmanColor;
           this.canvas.context.fill();
           break;
         case 3:
@@ -128,6 +128,13 @@ class Render {
           this.canvas.context.beginPath();
           this.canvas.context.arc(headRadius / 4 + retreatX,
             -headRadius / 2.2 + retreatY, headRadius / 8, 0, 2 * Math.PI);
+          this.canvas.context.fill();
+          break;
+        case 6:
+          this.canvas.context.beginPath();
+          this.canvas.context.arc(centrX, centrY, 15, 0, 2 * Math.PI);
+          this.canvas.context.lineTo(centrX, centrY);
+          this.canvas.context.fillStyle = 'red';
           this.canvas.context.fill();
         }
       }

@@ -17,7 +17,7 @@ let rememberWay = [];
 let interval;
 let mouth = true;
 const move = (direction, pacmanDirection) => {
-  game[direction]('pacman');
+  game.move(direction);
   pacmanRotation = pacmanDirection;
 };
 const rememberMove = () => {
@@ -26,7 +26,12 @@ const rememberMove = () => {
   rememberWay = [];
 };
 setInterval(() => {
-  render.renderLevel(game.LEVEL, pacmanRotation, anim, smooth);
+  if (game.pacman.killingMode) {
+    render.renderLevel(game.LEVEL, pacmanRotation, anim, smooth, 'red');
+    setTimeout(() => {
+      game.pacman.killingMode = false;
+    }, 10000);
+  } else  render.renderLevel(game.LEVEL, pacmanRotation, anim, smooth);
   if (anim < 0.19 && mouth) {
     anim += 0.015;
     anim = +anim.toFixed(3);
@@ -59,7 +64,7 @@ setInterval(() => {
     clearInterval(interval);
   }
   score.textContent = `Score:${game.score}`;
-  if (game.score >= 18900) {
+  if (game.score >= 18800) {
     alert('Congratulation!');
     game = new Game();
     smooth = [0, 0];
@@ -67,41 +72,44 @@ setInterval(() => {
 }, 20);
 const moveDown = () => {
   if (game.LEVEL[game.pacman.y + 1]) {
-    if (game.LEVEL[game.pacman.y + 1][game.pacman.x] !== 1) {
-      move('moveDown', pacmanDown);
+    if (game.LEVEL[game.pacman.y + 1][game.pacman.x] !== game.wallCode) {
+      move([0, 1], pacmanDown);
       smooth = [0, 40];
     }
-  } else move('moveDown', pacmanDown);
+  } else move([0, 1], pacmanDown);
 };
 const moveUp = () => {
   if (game.LEVEL[game.pacman.y - 1]) {
-    if (game.LEVEL[game.pacman.y - 1][game.pacman.x] !== 1) {
-      move('moveUp', pacmanUp);
+    if (game.LEVEL[game.pacman.y - 1][game.pacman.x] !== game.wallCode) {
+      move([0, -1], pacmanUp);
       smooth = [0, -40];
     }
-  } else move('moveUp', pacmanUp);
+  } else move([0, -1], pacmanUp);
 };
 const moveRight = () => {
   if (game.LEVEL[game.pacman.y][game.pacman.x + 1] + 1) {
-    if (game.LEVEL[game.pacman.y][game.pacman.x + 1] !== 1) {
-      move('moveRight', pacmanRight);
+    if (game.LEVEL[game.pacman.y][game.pacman.x + 1] !== game.wallCode) {
+      move([1, 0], pacmanRight);
       smooth = [40, 0];
     }
-  } else move('moveRight', pacmanRight);
+  } else move([1, 0], pacmanRight);
 };
 const moveLeft = () => {
   if (game.LEVEL[game.pacman.y][game.pacman.x - 1] + 1) {
-    if (game.LEVEL[game.pacman.y][game.pacman.x - 1] !== 1) {
-      move('moveLeft', pacmanLeft);
+    if (game.LEVEL[game.pacman.y][game.pacman.x - 1] !== game.wallCode) {
+      move([-1, 0], pacmanLeft);
       smooth = [-40, 0];
     }
-  } else move('moveLeft', pacmanLeft);
+  } else move([-1, 0], pacmanLeft);
 };
+setInterval(() => {
+  game.bonus.randomSpawn();
+}, 50000);
 document.addEventListener('keydown', event => {
   switch (event.key) {
   case 'ArrowDown':
   case 's':
-    if (game.LEVEL[game.pacman.y + 1][game.pacman.x] !== 1) {
+    if (game.LEVEL[game.pacman.y + 1][game.pacman.x] !== game.wallCode) {
       clearInterval(interval);
       {
         interval = setInterval(moveDown, 300);
@@ -110,7 +118,7 @@ document.addEventListener('keydown', event => {
     break;
   case 'w':
   case 'ArrowUp':
-    if (game.LEVEL[game.pacman.y - 1][game.pacman.x] !== 1) {
+    if (game.LEVEL[game.pacman.y - 1][game.pacman.x] !== game.wallCode) {
       clearInterval(interval);
       {
         interval = setInterval(moveUp, 300);
@@ -119,7 +127,7 @@ document.addEventListener('keydown', event => {
     break;
   case 'a':
   case 'ArrowLeft':
-    if (game.LEVEL[game.pacman.y ][game.pacman.x - 1] !== 1) {
+    if (game.LEVEL[game.pacman.y ][game.pacman.x - 1] !== game.wallCode) {
       clearInterval(interval);
       {
         interval = setInterval(moveLeft, 300);
@@ -128,7 +136,7 @@ document.addEventListener('keydown', event => {
     break;
   case 'd':
   case 'ArrowRight':
-    if (game.LEVEL[game.pacman.y ][game.pacman.x + 1] !== 1) {
+    if (game.LEVEL[game.pacman.y ][game.pacman.x + 1] !== game.wallCode) {
       clearInterval(interval);
       {
         interval = setInterval(moveRight, 300);
