@@ -43,9 +43,47 @@ class Game {
     this.gameOver = false;
 
     this.pacman = {
+      temp: this,
       x: 1,
       y: 1,
-      killingMode: false
+      killingMode: false,
+      move(direction = [0, 0]) {
+        if (this.temp.LEVEL[this.y + direction[1]] === undefined) {
+          this.temp.LEVEL[this.y][this.x] = 0;
+          this.y = this.temp.LEVEL.length - this.y - 1;
+          this.temp.LEVEL[this.y][this.x] = this.temp.pacmanCode;
+        } else if (this.temp.LEVEL[this.y + direction[1]][this.x + direction[0]] === undefined) {
+          this.temp.LEVEL[this.y][this.x] = 0;
+          this.x = this.temp.LEVEL[0].length - this.x - 1;
+          this.temp.LEVEL[this.y][this.x] = this.temp.pacmanCode;
+          return 0;
+        }
+        const nextPosition = this.temp.LEVEL[this.y + direction[1]][this.x + direction[0]];
+        if (nextPosition !== this.temp.wallCode) {
+          if (this.killingMode) {
+            if (nextPosition === this.temp.ghostCode) {
+              this.temp.ghost.x = 9;
+              this.temp.ghost.y = 9;
+            }
+            if (nextPosition === this.temp.ghost2Code) {
+              this.temp.ghost2.x = 18;
+              this.temp.ghost2.y = 19;
+            }
+          } else if (nextPosition === this.temp.ghostCode || nextPosition === this.temp.ghost2Code) {
+            this.temp.gameOver = true;
+          }
+          if (nextPosition === this.temp.scoreBallCode) {
+            this.temp.score += 100;
+          }
+          if (nextPosition === this.temp.bonusCode) {
+            this.killingMode = true;
+          }
+          this.temp.LEVEL[this.y][this.x] = 0;
+          this.x += direction[0];
+          this.y += direction[1];
+          this.temp.LEVEL[this.y][this.x] = 2;
+        }
+      }
     };
 
     this.bonus = {
@@ -97,6 +135,7 @@ class Game {
             }
           }
         }
+        setTimeout(10000)
         this.temp.LEVEL[this.y][this.x] = this.on;
         this.pastPosition = [this.x, this.y];
         if (way.length === 0) way = this.pastPosition;
@@ -154,43 +193,5 @@ class Game {
         this.temp.LEVEL[this.y][this.x] = this.temp.ghost2Code;
       }
     };
-  }
-
-  move(direction = [0, 0]) {
-    if (this.LEVEL[this.pacman.y + direction[1]] === undefined) {
-      this.LEVEL[this.pacman.y][this.pacman.x] = 0;
-      this.pacman.y = this.LEVEL.length - this.pacman.y - 1;
-      this.LEVEL[this.pacman.y][this.pacman.x] = this.pacmanCode;
-    } else if (this.LEVEL[this.pacman.y + direction[1]][this.pacman.x + direction[0]] === undefined) {
-      this.LEVEL[this.pacman.y][this.pacman.x] = 0;
-      this.pacman.x = this.LEVEL[0].length - this.pacman.x - 1;
-      this.LEVEL[this.pacman.y][this.pacman.x] = this.pacmanCode;
-      return 0;
-    }
-    const nextPosition = this.LEVEL[this.pacman.y + direction[1]][this.pacman.x + direction[0]];
-    if (nextPosition !== this.wallCode) {
-      if (this.pacman.killingMode) {
-        if (nextPosition === this.ghostCode) {
-          this.ghost.x = 9;
-          this.ghost.y = 9;
-        }
-        if (nextPosition === this.ghost2Code) {
-          this.ghost2.x = 18;
-          this.ghost2.y = 19;
-        }
-      } else if (nextPosition === this.ghostCode || nextPosition === this.ghost2Code) {
-        this.gameOver = true;
-      }
-      if (nextPosition === this.scoreBallCode) {
-        this.score += 100;
-      }
-      if (nextPosition === this.bonusCode) {
-        this.pacman.killingMode = true;
-      }
-      this.LEVEL[this.pacman.y][this.pacman.x] = 0;
-      this.pacman.x += direction[0];
-      this.pacman.y += direction[1];
-      this.LEVEL[this.pacman.y][this.pacman.x] = 2;
-    }
   }
 }

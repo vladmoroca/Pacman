@@ -36,10 +36,10 @@ class Render {
           break;
         case 2:
           this.canvas.context.beginPath();
-          this.canvas.context.arc(centrX - smooth[0],
-            centrY - smooth[1],
+          this.canvas.context.arc(centrX - smooth.pacmanX,
+            centrY - smooth.pacmanY,
             radius, (pos - anim) * Math.PI, (pos - 0.4 + anim) * Math.PI);
-          this.canvas.context.lineTo(centrX - smooth[0], centrY - smooth[1]);
+          this.canvas.context.lineTo(centrX - smooth.pacmanX, centrY - smooth.pacmanY);
           this.canvas.context.fillStyle = pacmanColor;
           this.canvas.context.fill();
           break;
@@ -57,37 +57,41 @@ class Render {
           this.canvas.context.beginPath();
           for (let foot = 0; foot < feet; foot++) {
             this.canvas.context.arc(
-              (2 * footRadius * (feet - foot)) - headRadius - footRadius + retreatX,
-              radius - footRadius + retreatY,
+              (2 * footRadius * (feet - foot)) - headRadius - footRadius + retreatX - smooth.ghostX,
+              radius - footRadius + retreatY - smooth.ghostY,
               footRadius, 0, Math.PI
             );
           }
-          this.canvas.context.lineTo(-headRadius + retreatX,
-            radius - footRadius + retreatY);
-          this.canvas.context.arc(retreatX,
-            headRadius - radius + retreatY, headRadius, Math.PI, 2 * Math.PI);
+          this.canvas.context.lineTo(-headRadius + retreatX - smooth.ghostX,
+            radius - footRadius + retreatY - smooth.ghostY);
+          this.canvas.context.arc(retreatX - smooth.ghostX,
+            headRadius - radius + retreatY - smooth.ghostY, headRadius, Math.PI, 2 * Math.PI);
           this.canvas.context.closePath();
           this.canvas.context.fill();
           this.canvas.context.stroke();
 
           this.canvas.context.fillStyle = 'white';
           this.canvas.context.beginPath();
-          this.canvas.context.arc(-headRadius / 2.5 + retreatX,
-            -headRadius / 2 + retreatY, headRadius / 3, 0, 2 * Math.PI);
+          this.canvas.context.arc(-headRadius / 2.5 + retreatX - smooth.ghostX,
+            -headRadius / 2 + retreatY - smooth.ghostY,
+            headRadius / 3, 0, 2 * Math.PI);
           this.canvas.context.fill();
           this.canvas.context.beginPath();
-          this.canvas.context.arc(headRadius / 3.5 + retreatX,
-            -headRadius / 2 + retreatY, headRadius / 3, 0, 2 * Math.PI);
+          this.canvas.context.arc(headRadius / 3.5 + retreatX - smooth.ghostX,
+            -headRadius / 2 + retreatY - smooth.ghostY,
+            headRadius / 3, 0, 2 * Math.PI);
           this.canvas.context.fill();
 
           this.canvas.context.fillStyle = 'black';
           this.canvas.context.beginPath();
-          this.canvas.context.arc(-headRadius / 2 + retreatX,
-            -headRadius / 2.2 + retreatY, headRadius / 8, 0, 2 * Math.PI);
+          this.canvas.context.arc(-headRadius / 2 + retreatX - smooth.ghostX,
+            -headRadius / 2.2 + retreatY - smooth.ghostY,
+            headRadius / 8, 0, 2 * Math.PI);
           this.canvas.context.fill();
           this.canvas.context.beginPath();
-          this.canvas.context.arc(headRadius / 4 + retreatX,
-            -headRadius / 2.2 + retreatY, headRadius / 8, 0, 2 * Math.PI);
+          this.canvas.context.arc(headRadius / 4 + retreatX - smooth.ghostX,
+            -headRadius / 2.2 + retreatY - smooth.ghostY,
+            headRadius / 8, 0, 2 * Math.PI);
           this.canvas.context.fill();
           break;
         case 5:
@@ -97,37 +101,41 @@ class Render {
           this.canvas.context.beginPath();
           for (let foot = 0; foot < feet; foot++) {
             this.canvas.context.arc(
-              (2 * footRadius * (feet - foot)) - headRadius - footRadius + retreatX,
-              radius - footRadius + retreatY,
+              (2 * footRadius * (feet - foot)) - headRadius - footRadius + retreatX - smooth.ghost2X,
+              radius - footRadius + retreatY - smooth.ghost2Y,
               footRadius, 0, Math.PI
             );
           }
-          this.canvas.context.lineTo(-headRadius + retreatX,
-            radius - footRadius + retreatY);
-          this.canvas.context.arc(retreatX,
-            headRadius - radius + retreatY, headRadius, Math.PI, 2 * Math.PI);
+          this.canvas.context.lineTo(-headRadius + retreatX - smooth.ghost2X,
+            radius - footRadius + retreatY - smooth.ghost2Y);
+          this.canvas.context.arc(retreatX - smooth.ghost2X,
+            headRadius - radius + retreatY - smooth.ghost2Y, headRadius, Math.PI, 2 * Math.PI);
           this.canvas.context.closePath();
           this.canvas.context.fill();
           this.canvas.context.stroke();
 
           this.canvas.context.fillStyle = 'white';
           this.canvas.context.beginPath();
-          this.canvas.context.arc(-headRadius / 2.5 + retreatX,
-            -headRadius / 2 + retreatY, headRadius / 3, 0, 2 * Math.PI);
+          this.canvas.context.arc(-headRadius / 2.5 + retreatX - smooth.ghost2X,
+            -headRadius / 2 + retreatY - smooth.ghost2Y,
+            headRadius / 3, 0, 2 * Math.PI);
           this.canvas.context.fill();
           this.canvas.context.beginPath();
-          this.canvas.context.arc(headRadius / 3.5 + retreatX,
-            -headRadius / 2 + retreatY, headRadius / 3, 0, 2 * Math.PI);
+          this.canvas.context.arc(headRadius / 3.5 + retreatX - smooth.ghost2X,
+            -headRadius / 2 + retreatY - smooth.ghost2Y,
+            headRadius / 3, 0, 2 * Math.PI);
           this.canvas.context.fill();
 
           this.canvas.context.fillStyle = 'black';
           this.canvas.context.beginPath();
-          this.canvas.context.arc(-headRadius / 2 + retreatX,
-            -headRadius / 2.2 + retreatY, headRadius / 8, 0, 2 * Math.PI);
+          this.canvas.context.arc(-headRadius / 2 + retreatX - smooth.ghost2X,
+            -headRadius / 2.2 + retreatY - smooth.ghost2Y,
+            headRadius / 8, 0, 2 * Math.PI);
           this.canvas.context.fill();
           this.canvas.context.beginPath();
-          this.canvas.context.arc(headRadius / 4 + retreatX,
-            -headRadius / 2.2 + retreatY, headRadius / 8, 0, 2 * Math.PI);
+          this.canvas.context.arc(headRadius / 4 + retreatX - smooth.ghost2X,
+            -headRadius / 2.2 + retreatY - smooth.ghost2Y,
+            headRadius / 8, 0, 2 * Math.PI);
           this.canvas.context.fill();
           break;
         case 6:
