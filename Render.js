@@ -23,8 +23,8 @@ class Render {
         const centrY = y * this.blockHeight + this.blockHeight / 2;
         const block = row[x];
         const retreatX = x * this.blockWidth + this.blockWidth / 2;
-        const retreatY = y * this.blockHeight + this.blockHeight - 20;
-        const radius = 18;
+        const retreatY = y * this.blockHeight + this.blockHeight / 2;
+        const radius = this.blockWidth * 9 / 20;
         const feet = 4;
         const headRadius = radius * 0.8;
         const footRadius = headRadius / feet;
@@ -38,14 +38,14 @@ class Render {
           this.canvas.context.beginPath();
           this.canvas.context.arc(centrX - smooth[0],
             centrY - smooth[1],
-            18, (pos - anim) * Math.PI, (pos - 0.4 + anim) * Math.PI);
+            radius, (pos - anim) * Math.PI, (pos - 0.4 + anim) * Math.PI);
           this.canvas.context.lineTo(centrX - smooth[0], centrY - smooth[1]);
           this.canvas.context.fillStyle = pacmanColor;
           this.canvas.context.fill();
           break;
         case 3:
           this.canvas.context.beginPath();
-          this.canvas.context.arc(centrX, centrY, 4, 0, 2 * Math.PI);
+          this.canvas.context.arc(centrX, centrY, this.blockWidth / 10, 0, 2 * Math.PI);
           this.canvas.context.lineTo(centrX, centrY);
           this.canvas.context.fillStyle = 'black';
           this.canvas.context.fill();
@@ -132,7 +132,7 @@ class Render {
           break;
         case 6:
           this.canvas.context.beginPath();
-          this.canvas.context.arc(centrX, centrY, 15, 0, 2 * Math.PI);
+          this.canvas.context.arc(centrX, centrY, this.blockWidth * 3 / 8, 0, 2 * Math.PI);
           this.canvas.context.lineTo(centrX, centrY);
           this.canvas.context.fillStyle = 'red';
           this.canvas.context.fill();
