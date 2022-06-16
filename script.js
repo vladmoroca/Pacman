@@ -125,7 +125,7 @@ if (innerHeight > innerWidth) {
   button.addEventListener('touchstart', e => {
     const touchX = e.changedTouches[0].clientX;
     const touchY = e.changedTouches[0].clientY;
-    if ((touchX > width * 4 / 9) && (touchX < width * 5 / 9) && (touchY < height * 1.2)) {
+    if ((touchX > width * 3 / 7) && (touchX < width * 4 / 7) && (touchY < height * 1.24)) {
       if (game.LEVEL[game.pacman.y - 1][game.pacman.x] !== game.wallCode) {
         clearInterval(interval);
         {
@@ -133,7 +133,7 @@ if (innerHeight > innerWidth) {
         }
       } else rememberWay = [-1, 0, moveUp];
     }
-    if ((touchX > width * 4 / 9) && (touchX < width * 5 / 9) && (touchY < height * 1.55) && (touchY > height * 1.4)) {
+    if ((touchX > width * 3 / 7) && (touchX < width * 4 / 7) && (touchY < height * 1.6) && (touchY > height * 1.45)) {
       if (game.LEVEL[game.pacman.y + 1][game.pacman.x] !== game.wallCode) {
         clearInterval(interval);
         {
@@ -141,7 +141,7 @@ if (innerHeight > innerWidth) {
         }
       } else rememberWay = [1, 0, moveDown];
     }
-    if ((touchX > width * 6 / 9) && (touchX < width * 7 / 9) && (touchY < height * 1.4) && (touchY > height * 1.2)) {
+    if ((touchX > width * 9 / 14) && (touchX < width * 11 / 14) && (touchY < height * 1.4) && (touchY > height * 1.24)) {
       if (game.LEVEL[game.pacman.y ][game.pacman.x + 1] !== game.wallCode) {
         clearInterval(interval);
         {
@@ -149,7 +149,7 @@ if (innerHeight > innerWidth) {
         }
       } else rememberWay = [0, 1, moveRight];
     }
-    if ((touchX > width * 2 / 9) && (touchX < width * 3 / 9) && (touchY < height * 1.4) && (touchY > height * 1.2)) {
+    if ((touchX > width * 3 / 14) && (touchX < width * 5 / 14) && (touchY < height * 1.4) && (touchY > height * 1.24)) {
       if (game.LEVEL[game.pacman.y ][game.pacman.x - 1] !== game.wallCode) {
         clearInterval(interval);
         {

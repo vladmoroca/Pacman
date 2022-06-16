@@ -14,13 +14,13 @@ class MobileRender {
   renderButton() {
 
     this.canvas.context.fillStyle = 'navy';
-    this.canvas.context.fillRect(this.width * 4 / 9,
-      0, this.width / 9, this.width / 9);
-    this.canvas.context.fillRect(this.width * 2 / 9,
-      this.height * 3 / 18, this.width / 9, this.width / 9);
-    this.canvas.context.fillRect(this.width * 6 / 9,
-      this.height * 3 / 18, this.width / 9, this.width / 9);
-    this.canvas.context.fillRect(this.width * 4 / 9,
-      this.height * 6 / 18, this.width / 9, this.width / 9);
+    this.canvas.context.fillRect(this.width * 3 / 7,
+      0, this.width / 7, this.width / 7);
+    this.canvas.context.fillRect(this.width * 3 / 14,
+      this.height * 2.5 / 14, this.width / 7, this.width / 7);
+    this.canvas.context.fillRect(this.width * 9 / 14,
+      this.height * 2.5 / 14, this.width / 7, this.width / 7);
+    this.canvas.context.fillRect(this.width * 3 / 7,
+      this.height * 5 / 14, this.width / 7, this.width / 7);
   }
 }
