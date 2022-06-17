@@ -5,6 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="./style.css"/>
 </head>
 
 <body>
@@ -14,12 +15,19 @@
   <div id = "score">
     <div class="text">Score:0</div>
   </div>
-  <div id = "MobileControl">
-    <canvas id = 'canvas2'></canvas>
-  </div>
+  <div id="mobController">
+    <div style="width: 64px; height: 64px;"></div>
+    <img class="arrow" id="up" src="./inputIcons/up.png" alt="">
+    <div style="width: 64px; height: 64px;"></div>
+    <img class="arrow" id="left" src="./inputIcons/left.png" alt="">
+    <div style="width: 64px; height: 64px;"></div>
+    <img class="arrow" id="right" src="./inputIcons/right.png" alt="">
+    <div style="width: 64px; height: 64px;"></div>
+    <img class="arrow" id="down" src="./inputIcons/down.png" alt="">
+    <div style="width: 64px; height: 64px;"></div>
+</div>
 
   <script src="./Game.js"> </script>
   <script src="./Render.js"> </script>
-  <script src="./MobileRender.js"> </script>
   <script src="./script.js"> </script>
 </body>

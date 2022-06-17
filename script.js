@@ -1,13 +1,22 @@
+/* eslint-disable no-loop-func */
 'use strict';
+
+const mobController = document.getElementById('mobController');
+const arrows = document.querySelectorAll('.arrow');
 
 const pacmanLeft = 1.2;
 const pacmanRight = 0.2;
 const pacmanUp = 1.7;
 const pacmanDown = 0.7;
+const bonusTimer = 50000;
+const pacmanTimer = 300;
+const ghostsTimer = 400;
+const killingModeTimer = 10000;
+const renderTimer = 20;
 const root = document.getElementById('root');
 const score = document.getElementById('score');
-let height = document.documentElement.clientHeight / 1.1;
-let width =  document.documentElement.clientHeight / 1.05 / 1.1;
+const height = document.documentElement.clientHeight / 1.1;
+const width = height / 1.05;
 let render = new Render(root, width, height, 21, 20);
 let game = new Game();
 window.render  = render;
@@ -25,26 +34,81 @@ let pacmanRotation = pacmanRight;
 let rememberWay = [];
 let interval;
 let mouth = true;
-
-
-if (innerHeight > innerWidth) {
-  const button = document.getElementById('MobileControl');
-  width = document.documentElement.clientWidth;
-  height =  document.documentElement.clientWidth * 1.05;
+let arrowsShown = false;
+mobController.style.display = 'none';
+if (document.documentElement.clientHeight > document.documentElement.clientWidth) {
+  const width =  document.documentElement.clientWidth;
+  const height = width * 1.05;
+  arrowsShown = true;
   render = new Render(root, width, height, 21, 20);
-  const buttonRender = new MobileRender(button, width, height);
-  buttonRender.renderButton();
 }
 const size = render.blockWidth;
 const animationSpeed = size * 3 / 40;
+const isWall = (x, y) => game.LEVEL[y][x] === game.wallCode;
 
 const move = (direction, pacmanDirection) => {
+  if (game.LEVEL[game.pacman.y + direction[1]]) {
+    if (!isWall(game.pacman.x + direction[0], game.pacman.y + direction[1])) {
+      smooth.pacmanX = size * direction[0];
+      smooth.pacmanY = size * direction[1];
+    }
+  }
   game.pacman.move(direction);
   pacmanRotation = pacmanDirection;
 };
+
+const keys = {
+  w: { id: 'w', direction: [0, -1], pacmanRotation: pacmanUp },
+  s: { id: 's', direction: [0, 1], pacmanRotation: pacmanDown },
+  a: { id: 'a', direction: [-1, 0], pacmanRotation: pacmanLeft },
+  d: { id: 'd', direction: [1, 0], pacmanRotation: pacmanRight },
+  up: { id: 'ArrowUp', direction: [0, -1], pacmanRotation: pacmanUp },
+  down: { id: 'ArrowDown', direction: [0, 1], pacmanRotation: pacmanDown },
+  left: { id: 'ArrowLeft', direction: [-1, 0], pacmanRotation: pacmanLeft },
+  right: { id: 'ArrowRight', direction: [1, 0], pacmanRotation: pacmanRight },
+};
+const keyboardInput = coll => {
+  onkeydown = el => {
+    for (const key of Object.keys(coll)) {
+      if (el.key === coll[key].id) {
+        if (!isWall(game.pacman.x + coll[key].direction[0], game.pacman.y + coll[key].direction[1])) {
+          clearInterval(interval);
+          interval = setInterval(move, pacmanTimer, coll[key].direction, coll[key].pacmanRotation);
+        } else rememberWay = [coll[key].direction[0], coll[key].direction[1], move, coll[key].direction, coll[key].pacmanRotation];
+      }
+    }
+  };
+};
+keyboardInput(keys);
+
+const mobileArrows = {
+  up: { id: 'up', direction: [0, -1], pacmanRotation: pacmanUp },
+  down: { id: 'down', direction: [0, 1], pacmanRotation: pacmanDown },
+  left: { id: 'left', direction: [-1, 0], pacmanRotation: pacmanLeft },
+  right: { id: 'right', direction: [1, 0], pacmanRotation: pacmanRight },
+};
+const mobileInput = coll => {
+  for (const arrow of arrows) {
+    arrow.onclick = () => {
+      for (const key of Object.keys(coll)) {
+        if (coll[key].id === arrow.id) {
+          if (!isWall(game.pacman.x + coll[key].direction[0], game.pacman.y + coll[key].direction[1])) {
+            clearInterval(interval);
+            interval = setInterval(move, pacmanTimer, coll[key].direction, coll[key].pacmanRotation);
+          } else rememberWay = [coll[key].direction[0], coll[key].direction[1], move, coll[key].direction, coll[key].pacmanRotation];
+        }
+      }
+    };
+  }
+};
+if (arrowsShown) {
+  mobController.style.display = '';
+  mobileInput(mobileArrows);
+}
+
 const rememberMove = () => {
   clearInterval(interval);
-  interval = setInterval(rememberWay[2], 300);
+  interval = setInterval(rememberWay[2], pacmanTimer, rememberWay[3], rememberWay[4]);
   rememberWay = [];
 };
 setInterval(() => {
@@ -52,7 +116,7 @@ setInterval(() => {
     render.renderLevel(game.LEVEL, pacmanRotation, anim, smooth, 'red');
     setTimeout(() => {
       game.pacman.killingMode = false;
-    }, 10000);
+    }, killingModeTimer);
   } else  render.renderLevel(game.LEVEL, pacmanRotation, anim, smooth);
   if (anim < 0.19 && mouth) {
     anim += 0.015;
@@ -62,8 +126,8 @@ setInterval(() => {
     anim -= 0.015;
     anim = +anim.toFixed(3);
   } else mouth = true;
-  if (rememberWay[0] + 2) {
-    if (game.LEVEL[game.pacman.y + rememberWay[0]][game.pacman.x + rememberWay[1]] !== 1) {
+  if (rememberWay[1] + 2) {
+    if (!isWall(game.pacman.x + rememberWay[0], game.pacman.y + rememberWay[1])) {
       rememberMove();
     }
   }
@@ -85,127 +149,12 @@ setInterval(() => {
     smooth.pacmanX = 0;
     smooth.pacmanY = 0;
   }
-}, 20);
-const moveDown = () => {
-  if (game.LEVEL[game.pacman.y + 1]) {
-    if (game.LEVEL[game.pacman.y + 1][game.pacman.x] !== game.wallCode) {
-      move([0, 1], pacmanDown);
-      smooth.pacmanX = 0;
-      smooth.pacmanY = size;
-    }
-  } else move([0, 1], pacmanDown);
-};
-const moveUp = () => {
-  if (game.LEVEL[game.pacman.y - 1]) {
-    if (game.LEVEL[game.pacman.y - 1][game.pacman.x] !== game.wallCode) {
-      move([0, -1], pacmanUp);
-      smooth.pacmanX = 0;
-      smooth.pacmanY = -size;
-    }
-  } else move([0, -1], pacmanUp);
-};
-const moveRight = () => {
-  if (game.LEVEL[game.pacman.y][game.pacman.x + 1] + 1) {
-    if (game.LEVEL[game.pacman.y][game.pacman.x + 1] !== game.wallCode) {
-      move([1, 0], pacmanRight);
-      smooth.pacmanX = size;
-      smooth.pacmanY = 0;
-    }
-  } else move([1, 0], pacmanRight);
-};
-const moveLeft = () => {
-  if (game.LEVEL[game.pacman.y][game.pacman.x - 1] + 1) {
-    if (game.LEVEL[game.pacman.y][game.pacman.x - 1] !== game.wallCode) {
-      move([-1, 0], pacmanLeft);
-      smooth.pacmanX = -size;
-      smooth.pacmanY = 0;
-    }
-  } else move([-1, 0], pacmanLeft);
-};
+}, renderTimer);
 
 const bonusInterval = setInterval(() => {
   game.bonus.randomSpawn();
-}, 50000);
-if (innerHeight > innerWidth) {
-  const button = document.getElementById('MobileControl');
-  button.addEventListener('touchstart', e => {
-    const touchX = e.changedTouches[0].clientX;
-    const touchY = e.changedTouches[0].clientY;
-    if ((touchX > width * 3 / 7) && (touchX < width * 4 / 7) && (touchY < height * 1.24)) {
-      if (game.LEVEL[game.pacman.y - 1][game.pacman.x] !== game.wallCode) {
-        clearInterval(interval);
-        {
-          interval = setInterval(moveUp, 300);
-        }
-      } else rememberWay = [-1, 0, moveUp];
-    }
-    if ((touchX > width * 3 / 7) && (touchX < width * 4 / 7) && (touchY < height * 1.6) && (touchY > height * 1.45)) {
-      if (game.LEVEL[game.pacman.y + 1][game.pacman.x] !== game.wallCode) {
-        clearInterval(interval);
-        {
-          interval = setInterval(moveDown, 300);
-        }
-      } else rememberWay = [1, 0, moveDown];
-    }
-    if ((touchX > width * 9 / 14) && (touchX < width * 11 / 14) && (touchY < height * 1.4) && (touchY > height * 1.24)) {
-      if (game.LEVEL[game.pacman.y ][game.pacman.x + 1] !== game.wallCode) {
-        clearInterval(interval);
-        {
-          interval = setInterval(moveRight, 300);
-        }
-      } else rememberWay = [0, 1, moveRight];
-    }
-    if ((touchX > width * 3 / 14) && (touchX < width * 5 / 14) && (touchY < height * 1.4) && (touchY > height * 1.24)) {
-      if (game.LEVEL[game.pacman.y ][game.pacman.x - 1] !== game.wallCode) {
-        clearInterval(interval);
-        {
-          interval = setInterval(moveLeft, 300);
-        }
-      } else rememberWay = [0, -1, moveLeft];
-    }
-  });
-}
+}, bonusTimer);
 
-document.addEventListener('keydown', event => {
-  switch (event.key) {
-  case 'ArrowDown':
-  case 's':
-    if (game.LEVEL[game.pacman.y + 1][game.pacman.x] !== game.wallCode) {
-      clearInterval(interval);
-      {
-        interval = setInterval(moveDown, 300);
-      }
-    } else rememberWay = [1, 0, moveDown];
-    break;
-  case 'w':
-  case 'ArrowUp':
-    if (game.LEVEL[game.pacman.y - 1][game.pacman.x] !== game.wallCode) {
-      clearInterval(interval);
-      {
-        interval = setInterval(moveUp, 300);
-      }
-    } else rememberWay = [-1, 0, moveUp];
-    break;
-  case 'a':
-  case 'ArrowLeft':
-    if (game.LEVEL[game.pacman.y ][game.pacman.x - 1] !== game.wallCode) {
-      clearInterval(interval);
-      {
-        interval = setInterval(moveLeft, 300);
-      }
-    } else rememberWay = [0, -1, moveLeft];
-    break;
-  case 'd':
-  case 'ArrowRight':
-    if (game.LEVEL[game.pacman.y ][game.pacman.x + 1] !== game.wallCode) {
-      clearInterval(interval);
-      {
-        interval = setInterval(moveRight, 300);
-      }
-    } else rememberWay = [0, 1, moveRight];
-    break;
-  }
-});
 setInterval(() => {
   game.ghost.move(game.ghost.x, game.ghost.y, game.pacman.x, game.pacman.y);
   if (game.ghost.pastPosition[0] > game.ghost.x) smooth.ghostX = -size;
@@ -218,5 +167,5 @@ setInterval(() => {
   if (game.ghost2.pastPosition[1] > game.ghost2.y) smooth.ghost2Y = -size;
   if (game.ghost2.pastPosition[1] < game.ghost2.y) smooth.ghost2Y = size;
 }
-, 400);
+, ghostsTimer);
 

@@ -1,0 +1,12 @@
+#mobController {
+  position: inherit;
+  padding-left: 20%;
+  padding-right: 20%;
+  display: grid;
+  grid-template-columns: repeat(3, 80px);
+  grid-template-rows: repeat(3, 80px);
+  grid-column-start: 2;
+  grid-column-end: 3;
+  grid-row-start: 1;
+  grid-row-end: 2;
+}
