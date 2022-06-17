@@ -48,40 +48,45 @@ class Game {
       y: 1,
       killingMode: false,
       move(direction = [0, 0]) {
-        if (this.temp.LEVEL[this.y + direction[1]] === undefined) {
-          this.temp.LEVEL[this.y][this.x] = 0;
-          this.y = this.temp.LEVEL.length - this.y - 1;
-          this.temp.LEVEL[this.y][this.x] = this.temp.pacmanCode;
-        } else if (this.temp.LEVEL[this.y + direction[1]][this.x + direction[0]] === undefined) {
-          this.temp.LEVEL[this.y][this.x] = 0;
-          this.x = this.temp.LEVEL[0].length - this.x - 1;
-          this.temp.LEVEL[this.y][this.x] = this.temp.pacmanCode;
+        const temp = this.temp;
+        if (temp.LEVEL[this.y + direction[1]] === undefined) {
+          temp.LEVEL[this.y][this.x] = 0;
+          this.y = temp.LEVEL.length - this.y - 1;
+          temp.LEVEL[this.y][this.x] = temp.pacmanCode;
+        } else if (temp.LEVEL[this.y + direction[1]][this.x + direction[0]] === undefined) {
+          temp.LEVEL[this.y][this.x] = 0;
+          this.x = temp.LEVEL[0].length - this.x - 1;
+          temp.LEVEL[this.y][this.x] = temp.pacmanCode;
           return 0;
         }
-        const nextPosition = this.temp.LEVEL[this.y + direction[1]][this.x + direction[0]];
-        if (nextPosition !== this.temp.wallCode) {
+        const nextPosition = temp.LEVEL[this.y + direction[1]][this.x + direction[0]];
+        if (nextPosition !== temp.wallCode) {
           if (this.killingMode) {
-            if (nextPosition === this.temp.ghostCode) {
-              this.temp.ghost.x = 9;
-              this.temp.ghost.y = 9;
+            if (nextPosition === temp.ghostCode) {
+              temp.LEVEL[temp.ghost.y][temp.ghost.x] = temp.ghost.on;
+              temp.ghost.x = 9;
+              temp.ghost.y = 9;
+              temp.ghost.on = 0;
             }
-            if (nextPosition === this.temp.ghost2Code) {
-              this.temp.ghost2.x = 18;
-              this.temp.ghost2.y = 19;
+            if (nextPosition === temp.ghost2Code) {
+              temp.LEVEL[temp.ghost2.y][temp.ghost2.x] = temp.ghost2.on;
+              temp.ghost2.x = 18;
+              temp.ghost2.y = 19;
+              temp.ghost2.on = 0;
             }
-          } else if (nextPosition === this.temp.ghostCode || nextPosition === this.temp.ghost2Code) {
-            this.temp.gameOver = true;
+          } else if (nextPosition === temp.ghostCode || nextPosition === temp.ghost2Code) {
+            temp.gameOver = true;
           }
-          if (nextPosition === this.temp.scoreBallCode) {
-            this.temp.score += 100;
+          if (nextPosition === temp.scoreBallCode) {
+            temp.score += 100;
           }
-          if (nextPosition === this.temp.bonusCode) {
+          if (nextPosition === temp.bonusCode) {
             this.killingMode = true;
           }
-          this.temp.LEVEL[this.y][this.x] = 0;
+          temp.LEVEL[this.y][this.x] = 0;
           this.x += direction[0];
           this.y += direction[1];
-          this.temp.LEVEL[this.y][this.x] = 2;
+          temp.LEVEL[this.y][this.x] = 2;
         }
       }
     };
@@ -110,19 +115,20 @@ class Game {
       num: 0,
       pastPosition: [],
       move(x, y, pacmanX, pacmanY) {
+        const temp = this.temp;
         let min = 500;
         let max = 0;
         let way = [];
-        const isWall = (y, x) => this.temp.LEVEL[y][x] === this.temp.wallCode;
-        const isGhost2 = (y, x) => this.temp.LEVEL[y][x] === this.temp.ghost2Code;
+        const isWall = (y, x) => temp.LEVEL[y][x] === temp.wallCode;
+        const isGhost2 = (y, x) => temp.LEVEL[y][x] === temp.ghost2Code;
         for (let i = y - 1; i <= y + 1; i++) {
           const startX = x - 1 + ((y + i) % 2);
           for (let j = startX; j <= x + 1; j += 2) {
-            if (this.temp.LEVEL[i]) {
+            if (temp.LEVEL[i]) {
               if (!isWall(i, j) && !isGhost2(i, j)) {
                 const thisWayLenght = ((j - pacmanX) * (j - pacmanX)) + ((i - pacmanY) * (i - pacmanY));
                 const noBack = !((j === this.pastPosition[0]) && (i === this.pastPosition[1]));
-                if (this.temp.pacman.killingMode) {
+                if (temp.pacman.killingMode) {
                   if ((thisWayLenght > max) && noBack) {
                     max = thisWayLenght;
                     way = [j, i];
@@ -135,17 +141,16 @@ class Game {
             }
           }
         }
-        setTimeout(10000)
-        this.temp.LEVEL[this.y][this.x] = this.on;
+        temp.LEVEL[this.y][this.x] = this.on;
         this.pastPosition = [this.x, this.y];
         if (way.length === 0) way = this.pastPosition;
         this.x = way[0];
         this.y = way[1];
-        this.on = this.temp.LEVEL[this.y][this.x];
-        if (this.on === this.temp.pacmanCode && !this.temp.pacman.killingMode) {
-          this.temp.gameOver = true;
+        this.on = temp.LEVEL[this.y][this.x];
+        if (this.on === temp.pacmanCode && !temp.pacman.killingMode) {
+          temp.gameOver = true;
         }
-        this.temp.LEVEL[this.y][this.x] = 4;
+        temp.LEVEL[this.y][this.x] = 4;
       }
     };
 
@@ -158,19 +163,20 @@ class Game {
       num: 0,
       pastPosition: [],
       move(x, y, pacmanX, pacmanY) {
+        const temp = this.temp;
         let min = 500;
         let way = [];
         let max = 0;
-        const isWall = (y, x) => this.temp.LEVEL[y][x] === this.temp.wallCode;
-        const isGhost = (y, x) => this.temp.LEVEL[y][x] === this.temp.ghostCode;
+        const isWall = (y, x) => temp.LEVEL[y][x] === temp.wallCode;
+        const isGhost = (y, x) => temp.LEVEL[y][x] === temp.ghostCode;
         for (let i = y - 1; i <= y + 1; i++) {
           const startX = x - 1 + ((y + i) % 2);
           for (let j = startX; j <= x + 1; j += 2) {
-            if (this.temp.LEVEL[i]) {
+            if (temp.LEVEL[i]) {
               if (!isGhost(i, j) && !isWall(i, j)) {
                 const thisWayLenght = ((j - pacmanX) * (j - pacmanX)) + ((i - pacmanY) * (i - pacmanY));
                 const noBack = !((j === this.pastPosition[0]) && (i === this.pastPosition[1]));
-                if (this.temp.pacman.killingMode) {
+                if (temp.pacman.killingMode) {
                   if ((thisWayLenght > max) && noBack) {
                     max = thisWayLenght;
                     way = [j, i];
@@ -183,14 +189,14 @@ class Game {
             }
           }
         }
-        this.temp.LEVEL[this.y][this.x] = this.on;
+        temp.LEVEL[this.y][this.x] = this.on;
         this.pastPosition = [this.x, this.y];
         if (way.length === 0) way = this.pastPosition;
         this.x = way[0];
         this.y = way[1];
-        this.on = this.temp.LEVEL[this.y][this.x];
-        if (this.on === this.temp.pacmanCode && !this.temp.pacman.killingMode) this.temp.gameOver = true;
-        this.temp.LEVEL[this.y][this.x] = this.temp.ghost2Code;
+        this.on = temp.LEVEL[this.y][this.x];
+        if (this.on === temp.pacmanCode && !temp.pacman.killingMode) temp.gameOver = true;
+        temp.LEVEL[this.y][this.x] = temp.ghost2Code;
       }
     };
   }

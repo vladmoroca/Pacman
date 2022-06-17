@@ -13,6 +13,7 @@ const pacmanTimer = 300;
 const ghostsTimer = 400;
 const killingModeTimer = 10000;
 const renderTimer = 20;
+const winScore = 18900;
 const root = document.getElementById('root');
 const score = document.getElementById('score');
 const height = document.documentElement.clientHeight / 1.1;
@@ -71,10 +72,12 @@ const keyboardInput = coll => {
   onkeydown = el => {
     for (const key of Object.keys(coll)) {
       if (el.key === coll[key].id) {
-        if (!isWall(game.pacman.x + coll[key].direction[0], game.pacman.y + coll[key].direction[1])) {
+        const direct = coll[key].direction;
+        const rotate = coll[key].pacmanRotation;
+        if (!isWall(game.pacman.x + direct[0], game.pacman.y + direct[1])) {
           clearInterval(interval);
-          interval = setInterval(move, pacmanTimer, coll[key].direction, coll[key].pacmanRotation);
-        } else rememberWay = [coll[key].direction[0], coll[key].direction[1], move, coll[key].direction, coll[key].pacmanRotation];
+          interval = setInterval(move, pacmanTimer, direct, rotate);
+        } else rememberWay = [direct[0], direct[1], move, direct, rotate];
       }
     }
   };
@@ -92,10 +95,12 @@ const mobileInput = coll => {
     arrow.onclick = () => {
       for (const key of Object.keys(coll)) {
         if (coll[key].id === arrow.id) {
-          if (!isWall(game.pacman.x + coll[key].direction[0], game.pacman.y + coll[key].direction[1])) {
+          const direct = coll[key].direction;
+          const rotate = coll[key].pacmanRotation;
+          if (!isWall(game.pacman.x + direct[0], game.pacman.y + direct[1])) {
             clearInterval(interval);
-            interval = setInterval(move, pacmanTimer, coll[key].direction, coll[key].pacmanRotation);
-          } else rememberWay = [coll[key].direction[0], coll[key].direction[1], move, coll[key].direction, coll[key].pacmanRotation];
+            interval = setInterval(move, pacmanTimer, direct, rotate);
+          } else rememberWay = [direct[0], direct[1], move, direct, rotate];
         }
       }
     };
@@ -143,7 +148,7 @@ setInterval(() => {
     clearInterval(interval);
   }
   score.textContent = `Score:${game.score}`;
-  if (game.score >= 18800) {
+  if (game.score >= winScore) {
     alert('Congratulation!');
     game = new Game();
     smooth.pacmanX = 0;
