@@ -59,19 +59,19 @@ const move = (direction, pacmanDirection) => {
 };
 
 const keys = {
-  w: { id: 'w', direction: [0, -1], pacmanRotation: pacmanUp },
-  s: { id: 's', direction: [0, 1], pacmanRotation: pacmanDown },
-  a: { id: 'a', direction: [-1, 0], pacmanRotation: pacmanLeft },
-  d: { id: 'd', direction: [1, 0], pacmanRotation: pacmanRight },
-  up: { id: 'ArrowUp', direction: [0, -1], pacmanRotation: pacmanUp },
-  down: { id: 'ArrowDown', direction: [0, 1], pacmanRotation: pacmanDown },
-  left: { id: 'ArrowLeft', direction: [-1, 0], pacmanRotation: pacmanLeft },
-  right: { id: 'ArrowRight', direction: [1, 0], pacmanRotation: pacmanRight },
+  w: { direction: [0, -1], pacmanRotation: pacmanUp },
+  s: { direction: [0, 1], pacmanRotation: pacmanDown },
+  a: { direction: [-1, 0], pacmanRotation: pacmanLeft },
+  d: { direction: [1, 0], pacmanRotation: pacmanRight },
+  ArrowUp: { direction: [0, -1], pacmanRotation: pacmanUp },
+  ArrowDown: { direction: [0, 1], pacmanRotation: pacmanDown },
+  ArrowLeft: { direction: [-1, 0], pacmanRotation: pacmanLeft },
+  ArrowRight: { direction: [1, 0], pacmanRotation: pacmanRight },
 };
 const keyboardInput = coll => {
   onkeydown = el => {
     for (const key of Object.keys(coll)) {
-      if (el.key === coll[key].id) {
+      if (el.key === key) {
         const direct = coll[key].direction;
         const rotate = coll[key].pacmanRotation;
         if (!isWall(game.pacman.x + direct[0], game.pacman.y + direct[1])) {
@@ -160,17 +160,17 @@ const bonusInterval = setInterval(() => {
   game.bonus.randomSpawn();
 }, bonusTimer);
 
+const ghostAnim = (ghost, string) => {
+  const dx = ghost.x - ghost.pastPosition[0];
+  const dy = ghost.y - ghost.pastPosition[1];
+  smooth[string + 'X'] = dx * size;
+  smooth[string + 'Y'] = dy * size;
+};
 setInterval(() => {
   game.ghost.move(game.ghost.x, game.ghost.y, game.pacman.x, game.pacman.y);
-  if (game.ghost.pastPosition[0] > game.ghost.x) smooth.ghostX = -size;
-  if (game.ghost.pastPosition[0] < game.ghost.x) smooth.ghostX = size;
-  if (game.ghost.pastPosition[1] > game.ghost.y) smooth.ghostY = -size;
-  if (game.ghost.pastPosition[1] < game.ghost.y) smooth.ghostY = size;
+  ghostAnim(game.ghost, 'ghost');
   game.ghost2.move(game.ghost2.x, game.ghost2.y, game.pacman.x, game.pacman.y);
-  if (game.ghost2.pastPosition[0] > game.ghost2.x) smooth.ghost2X = -size;
-  if (game.ghost2.pastPosition[0] < game.ghost2.x) smooth.ghost2X = size;
-  if (game.ghost2.pastPosition[1] > game.ghost2.y) smooth.ghost2Y = -size;
-  if (game.ghost2.pastPosition[1] < game.ghost2.y) smooth.ghost2Y = size;
+  ghostAnim(game.ghost2, 'ghost2');
 }
 , ghostsTimer);
 
