@@ -14,15 +14,6 @@ const ghostsTimer = 400;
 const killingModeTimer = 10000;
 const renderTimer = 20;
 const winScore = 18900;
-const root = document.getElementById('root');
-const score = document.getElementById('score');
-const height = document.documentElement.clientHeight / 1.1;
-const width = height / 1.05;
-let render = new Render(root, width, height, 21, 20);
-let game = new Game();
-window.render  = render;
-window.game = game;
-let anim = 0;
 const smooth = {
   pacmanX: 0,
   pacmanY: 0,
@@ -31,18 +22,30 @@ const smooth = {
   ghost2X: 0,
   ghost2Y: 0
 };
+let anim = 0;
 let pacmanRotation = pacmanRight;
 let rememberWay = [];
 let interval;
 let mouth = true;
 let arrowsShown = false;
+
+const root = document.getElementById('root');
+const score = document.getElementById('score');
+const height = document.documentElement.clientHeight / 1.1;
+const width = height / 1.05;
+let render = new Render(root, width, height, 21, 20);
+let game = new Game();
+window.render  = render;
+window.game = game;
 mobController.style.display = 'none';
+
 if (document.documentElement.clientHeight > document.documentElement.clientWidth) {
   const width =  document.documentElement.clientWidth;
   const height = width * 1.05;
   arrowsShown = true;
   render = new Render(root, width, height, 21, 20);
 }
+
 const size = render.blockWidth;
 const animationSpeed = size * 3 / 40;
 const isWall = (x, y) => game.LEVEL[y][x] === game.wallCode;

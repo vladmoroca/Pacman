@@ -16,7 +16,7 @@
     "url": "git+https://github.com/vladmoroca/Pacman.git"
   },
   "author": "VLad",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/vladmoroca/Pacman/issues"
   },
