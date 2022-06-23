@@ -63,12 +63,14 @@ class Game {
         if (nextPosition !== temp.wallCode) {
           if (this.killingMode) {
             if (nextPosition === temp.ghostCode) {
+              temp.score += 1000;
               temp.LEVEL[temp.ghost.y][temp.ghost.x] = temp.ghost.on;
               temp.ghost.x = 9;
               temp.ghost.y = 9;
               temp.ghost.on = 0;
             }
             if (nextPosition === temp.ghost2Code) {
+              temp.score += 1000;
               temp.LEVEL[temp.ghost2.y][temp.ghost2.x] = temp.ghost2.on;
               temp.ghost2.x = 18;
               temp.ghost2.y = 19;
@@ -82,6 +84,7 @@ class Game {
           }
           if (nextPosition === temp.bonusCode) {
             this.killingMode = true;
+            temp.score += 500;
           }
           temp.LEVEL[this.y][this.x] = 0;
           this.x += direction[0];
@@ -197,7 +200,9 @@ class Game {
         this.x = way[0];
         this.y = way[1];
         this.on = temp.LEVEL[this.y][this.x];
-        if (this.on === temp.pacmanCode && !temp.pacman.killingMode) temp.gameOver = true;
+        if (this.on === temp.pacmanCode && !temp.pacman.killingMode) {
+          temp.gameOver = true;
+        }
         temp.LEVEL[this.y][this.x] = temp.ghost2Code;
       }
     };

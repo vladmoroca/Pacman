@@ -13,7 +13,7 @@ const pacmanTimer = 300;
 const ghostsTimer = 400;
 const killingModeTimer = 10000;
 const renderTimer = 20;
-const winScore = 18800;
+const winScore = 20000;
 const smooth = {
   pacmanX: 0,
   pacmanY: 0,
@@ -159,10 +159,12 @@ setInterval(() => {
   }
   score.textContent = `Score:${game.score}`;
   if (game.score >= winScore) {
-    alert('Congratulation!');
-    game = new Game();
-    smooth.pacmanX = 0;
-    smooth.pacmanY = 0;
+    setTimeout(() => {
+      alert('Congratulation!');
+      game = new Game();
+      smooth.pacmanX = 0;
+      smooth.pacmanY = 0;
+    }, pacmanTimer);
   }
 }, renderTimer);
 
