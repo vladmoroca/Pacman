@@ -13,7 +13,7 @@ const pacmanTimer = 300;
 const ghostsTimer = 400;
 const killingModeTimer = 10000;
 const renderTimer = 20;
-const winScore = 18900;
+const winScore = 18800;
 const smooth = {
   pacmanX: 0,
   pacmanY: 0,
@@ -33,8 +33,10 @@ const root = document.getElementById('root');
 const score = document.getElementById('score');
 const height = document.documentElement.clientHeight / 1.1;
 const width = height / 1.05;
-let render = new Render(root, width, height, 21, 20);
 let game = new Game();
+const rows = game.LEVEL.length;
+const columns = game.LEVEL[0].length;
+let render = new Render(root, width, height, rows, columns);
 window.render  = render;
 window.game = game;
 mobController.style.display = 'none';
@@ -43,7 +45,7 @@ if (document.documentElement.clientHeight > document.documentElement.clientWidth
   const width =  document.documentElement.clientWidth;
   const height = width * 1.05;
   arrowsShown = true;
-  render = new Render(root, width, height, 21, 20);
+  render = new Render(root, width, height, rows, columns);
 }
 
 const size = render.blockWidth;
@@ -119,6 +121,11 @@ const rememberMove = () => {
   interval = setInterval(rememberWay[2], pacmanTimer, rememberWay[3], rememberWay[4]);
   rememberWay = [];
 };
+
+const bonusInterval = setInterval(() => {
+  game.bonus.randomSpawn();
+}, bonusTimer);
+
 setInterval(() => {
   if (game.pacman.killingMode) {
     render.renderLevel(game.LEVEL, pacmanRotation, anim, smooth, 'red');
@@ -158,10 +165,6 @@ setInterval(() => {
     smooth.pacmanY = 0;
   }
 }, renderTimer);
-
-const bonusInterval = setInterval(() => {
-  game.bonus.randomSpawn();
-}, bonusTimer);
 
 const ghostAnim = (ghost, string) => {
   const dx = ghost.x - ghost.pastPosition[0];

@@ -95,10 +95,12 @@ class Game {
       temp: this,
       x: 11,
       y: 9,
+      pastPosition: [],
       randomSpawn() {
         const x = this.x;
         const y = this.y;
-        while (this.temp.LEVEL[this.y][this.x] !== 0) {
+        while (this.temp.LEVEL[this.y][this.x] !== 0 ||
+          ((this.x === x) && (this.y === y))) {
           this.x = Math.floor(Math.random() * 21);
           this.y = Math.floor(Math.random() * 21);
         }
